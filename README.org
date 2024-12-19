@@ -1,0 +1,17 @@
+#+TITLE: Internet-Draft Org Template Repository
+
+[[https://github.com/antonyantony/internet-draft-org-template/generate][Click here to create a new repository using the template]]
+
+Use this repository as a template if you want to start working on
+IETF Internet-Draft document,
+[[https://authors.ietf.org/en/content-guidelines-overview][IETF Author Guidelines]].
+
+Make sure to check "Include all branches", or you will need to enable
+GitHub Pages manually.
+
+* Laest Copy
+The latest version of the draft in HTML format is at:
+- [[https://AntonyAntony.github.io/internet-draft-org-template/draft-myname-wg-org-template-latest.html][Editor's Copy]]
+Rreplace github username s/AntonyAntony/USERNAME/
+# above URL, hostnmae, is replaced by .github/workflows/generate.yaml
+# sed -i "s|AntonyAtony.github.io/draft-myname-wg-org/|$USERNAME.github.io/$REPO_NAME/|g"

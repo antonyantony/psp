@@ -1,0 +1,56 @@
+# Do: title, toc:table-of-contents ::fixed-width-sections |tables
+# Do: ^:sup/sub with curly -:special-strings *:emphasis
+# Don't: prop:no-prop-drawers \n:preserve-linebreaks ':use-smart-quotes
+#+OPTIONS: prop:nil title:t toc:t \n:nil ::t |:t ^:{} -:t *:t ':nil
+
+#+RFC_CATEGORY: std
+#+RFC_NAME: draft-myname-wg-org-template
+#+RFC_VERSION: 00
+#+RFC_IPR: trust200902
+#+RFC_STREAM: IETF
+#+RFC_XML_VERSION: 3
+#+RFC_CONSENSUS: true
+
+#+TITLE: The full title of the draft
+#+RFC_SHORT_TITLE: Short Title
+#+AUTHOR: My Name
+#+EMAIL: abc@gmail.com
+#+AFFILIATION: The Company LLC
+#+RFC_SHORT_ORG: Company
+#+RFC_ADD_AUTHOR: ("Second Author" "second@foo.com" ("Company" "The Company LLC"))
+#+RFC_AREA: SEC
+#+RFC_WORKGROUP: My Working Group
+
+#+begin_abstract
+
+Add your abstract here.
+
+#+end_abstract
+
+#+RFC_KEYWORDS: ("EESP" "IKEv2")
+
+* Introduction
+
+** Requirements Language
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+"MAY", and "OPTIONAL" in this document are to be interpreted as
+described in BCP 14 [[RFC2119]] [[RFC8174]] when, and only when, they
+appear in all capitals, as shown here.
+
+* Acknowledgments
+
+TBD
+
+* Normative References
+
+** RFC8174
+
+* Informative References
+
+** RFC2119
+
+* Additional Stuff
+
+TBD
