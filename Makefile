@@ -1,4 +1,4 @@
-ORG ?= mydraft.org
+ORG ?= psp.org
 DOCKRUN ?=
 include mk/yang.mk
 RFC_NAME := $(shell sed -e '/^\#+RFC_NAME:/!d;s/\#+RFC_NAME: *\(.*\)/\1/' $(ORG))

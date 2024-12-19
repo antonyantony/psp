@@ -1,0 +1,92 @@
+# -*- fill-column: 69; -*-
+# vim: set textwidth=69
+# Do: title, toc:table-of-contents ::fixed-width-sections |tables
+# Do: ^:sup/sub with curly -:special-strings *:emphasis
+# Don't: prop:no-prop-drawers \n:preserve-linebreaks ':use-smart-quotes
+#+OPTIONS: prop:nil title:t toc:t \n:nil ::t |:t ^:{} -:t *:t ':nil
+
+#+RFC_CATEGORY: info
+#+RFC_NAME: draft-klassert-ipsecme-psp
+#+RFC_VERSION: 00
+#+RFC_IPR: trust200902
+#+RFC_STREAM: IETF
+#+RFC_XML_VERSION: 3
+#+RFC_CONSENSUS: true
+
+#+TITLE:  PSP Security Protocol (PSP)
+#+RFC_SHORT_TITLE: PSP
+#+AUTHOR: Steffen Klassert
+#+EMAIL: steffen.klassert@secunet.com
+#+AFFILIATION: secunet Security Networks AG
+#+RFC_SHORT_ORG: secunet
+#+RFC_SHORT_ORG: secunet
+#+RFC_ADD_AUTHOR: ("Antony Antony" "antony.antony@secunet.com" ("secunet" "secunet Security Networks AG"))
+#+RFC_AREA: SEC
+#+RFC_WORKGROUP: IPSECME Working Group
+
+#+begin_abstract
+This docunet specifies The PSP Security Protocol v2 (PSPv2), which use
+Encapsulating Security Payload (EESP) as packet format.
+
+#+end_abstract
+
+* Introduction
+
+The PSP Security Protocol (PSP) is designed to enable scaling to
+large numbers of SAs without requiring per-SA hardware state in the
+NIC. The PSP v2 extends these concepts using Encapsulating Security
+Payload (EESP),[[I-D.klassert-ipsecme-eesp]], packet format and
+features supported in EESP.
+
+* Stateless Decryption
+
+Stateless Decriptions is very friendly for hardware offloads
+it is more aligned with bump-in-the-wire than per session keys
+negotiated in IKEv2, [[RFC7296]]
+
+** Advantages
+- High throughput packets per second
+- lack of central SADB, SPDB scales well
+- Hardware offload friendly
+- Data center friendly
+- High rate of connection establishing and tear down 200K/sec
+
+
+** Derive longer keys
+
+Instead of deriving a 128bit key, derive a longer key and use the
+next 32bits as the salt for tge IV. The reciver when it generate the
+key and send to the sender should send a longer key,
+
+** AEX XTR KDF/PRF
+
+AES XTR also could be used as KDF function? Which is likely faster
+than AES-CMAC?
+
+* Normative References
+
+** RFC2627
+** RFC3948
+** RFC5840
+** RFC7296
+** I-D.klassert-ipsecme-eesp
+
+** NIST800-108
+:PROPERTIES:
+:REF_TARGET: https://www.nist.gov/publications/recommendation-key-derivation-using-pseudorandom-functions-1
+:REF_TITLE: Recommendation for Key Derivation Using Pseudorandom Functions
+:REF_ORG: NIST
+:END:
+
+* Informative References
+
+** I-D.klassert-ipsecme-wespv2
+** RFC9611
+
+** PSP
+:PROPERTIES:
+:REF_TARGET: https://github.com/google/psp/blob/main/doc/PSP_Arch_Spec.pdf
+:REF_TITLE: PSP Architecture Specification
+:REF_ORG: Google
+:END:
+

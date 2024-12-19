@@ -44,7 +44,7 @@ jobs:
       run: |
         USERNAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f1)
         REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
-        sed -i "s|AntonyAntony.github.io/internet-draft-org-template/|$USERNAME.github.io/$REPO_NAME/|g" deploy/index.html || true
+        sed -i "s|AntonyAntony.github.io/psp/|$USERNAME.github.io/$REPO_NAME/|g" deploy/index.html
 
     - name: "Archive Built Drafts : Optional step"
       uses: actions/upload-artifact@v4

@@ -1,0 +1,152 @@
+# -*- fill-column: 69; -*-
+# vim: set textwidth=69
+# Do: title, toc:table-of-contents ::fixed-width-sections |tables
+# Do: ^:sup/sub with curly -:special-strings *:emphasis
+# Don't: prop:no-prop-drawers \n:preserve-linebreaks ':use-smart-quotes
+#+OPTIONS: prop:nil title:t toc:t \n:nil ::t |:t ^:{} -:t *:t ':nil
+
+#+RFC_CATEGORY: info
+#+RFC_NAME: draft-antony-ipsecme-psp-notes
+#+RFC_VERSION: 00
+#+RFC_IPR: trust200902
+#+RFC_STREAM: IETF
+#+RFC_XML_VERSION: 3
+#+RFC_CONSENSUS: true
+
+#+TITLE: Notes on IKEv2 Key Derivation Function
+#+RFC_SHORT_TITLE: KEv2 KDF Notes
+#+AUTHOR: Antony Antony
+#+EMAIL: "antony.antony@secunet.com"
+#+AFFILIATION: secunet Security Networks AG
+#+RFC_SHORT_ORG: secunet
+#+RFC_AREA: SEC
+#+RFC_WORKGROUP: IPSECME Working Group
+
+* Introduction
+The PSP Security Protocol (PSP) is designed to enable scaling to
+large numbers of SAs without requiring per-SA hardware state in
+the NIC. The PSP v2 extends these concepts using Encapsulating
+Security Payload (EESP),[[I-D.klassert-ipsecme-eesp]], packet format
+and features supported in EESP.
+
+* Stateless Decryption
+
+Stateless Decriptions is very hardware offload friendly.
+It is more aligned with bump-in-the-wire than per session keys
+negotiated in IKEv2, [[RFC7296]]
+
+** Advantages
+- High throughput packets per second
+- lack of central SADB, SPDB scales well
+- Hardware offload friendly
+- Data center friendly
+- High rate of connection establishing and tear down 200K/sec
+
+** Limitations of Stateless receiving
+- no SADB on the receiver side
+- no Outer PSP fragments both for IPv4 and IPv6
+- no replay protection uisig SN
+- no Salt in IV. secret salt 32 bits in IPsec for AEAD IV
+- No Mapping changes possible
+- no SA expiry : on Bytes or Packets
+- no policy validation (hard to implement?)
+-   crypto algorithm
+-   ports
+- no gro or complicated gro
+- No validation policy
+- KDF function is not IETF standarized KDF AES-CMAC-256
+- SPI random collision, random 31 bit SPI could collide and use same
+  keys for two sesssions?
+- The KDF output seems to to 128 bit? when it support AES-GCM256 is
+  it using 128 bit or 256bit key?
+- There is only UDP encapsulated packet format even on IPv6. It is
+  wasting 8 bytes.
+
+** Derive longer keys
+
+Instead of deriving a 128bit key, derive a longer key and use the
+next 32bits as the salt for tge IV. The reciver when it generate the
+key and send to the sender should send a longer key,
+
+** AEX XTR as KDF/PRF
+
+AES XTR also could be used as KDF function? Which is likely faster
+than AES-CMAC?
+
+* PSP References
+
+- 202407 [[https://netdevconf.info/0x18/docs/netdev-0x18-paper35-talk-slides/netdev-0x18-paper35.pdf][NetDev0x18 : PSP security protocol]], NetDev0x18 [[https://www.youtube.com/watch?v=RlsxPMsWdxo][Video]]
+- 202407 Article: [[LWN.net-PSP]]: Offload-friendly network
+  encryption in the kernel
+- 202405 Linux Kernel proposed [[Patch-RFC]] set by Jakub Kicinski
+- 202401 NVIDIA
+  [[https://docs.nvidia.com/doca/sdk/nvidia+doca+psp+gateway+application+guide/index.html][DOCA PSP guide]]
+- 202203 [[PSP]] announcement, then it was already in developemnt and
+  use for a decade, [[PSP-announce]]
+- 202303 Likely a softwerare implemenation in Google Andromeda Linux
+  kernel, 5.15 based?
+
+* PSP+ Standardisation effort references:
+
+After the announcent of PSP there were proposals to standarize PSP,
+or PSP like use case  through  modernizing two decade old IPsec, ESP.
+
+- Write PSP specific use case. This Document would expand to an Internet Draft.
+- 202412 [[https://klassert.github.io/eesp-ikev2/draft-klassert-ipsecme-eesp-ikev2-latest.html][EESP IKEv2]]
+- 202410 IETF Internet Draft EESP [[I-D.klassert-ipsecme-eesp]]
+- 202405 IETF Internet Draft WESPv2[[I-D.klassert-ipsecme-wespv2]]
+
+* Normative References
+
+** RFC2627
+** RFC3948
+** RFC5840
+** RFC7296
+
+** NIST800-108
+:PROPERTIES:
+:REF_TARGET: https://www.nist.gov/publications/recommendation-key-derivation-using-pseudorandom-functions-1
+:REF_TITLE: Recommendation for Key Derivation Using Pseudorandom Functions
+:REF_ORG: NIST
+:END:
+
+* Informative References
+
+** I-D.klassert-ipsecme-eesp
+** I-D.klassert-ipsecme-wespv2
+** RFC9611
+
+** PSP
+:PROPERTIES:
+:REF_TARGET: https://github.com/google/psp/blob/main/doc/PSP_Arch_Spec.pdf
+:REF_TITLE: PSP Architecture Specification
+:REF_ORG: Google
+:END:
+
+** PSP-announce
+:PROPERTIES:
+:REF_TARGET: https://github.com/google/psp/blob/main/doc/PSP_Arch_Spec.pdf
+:REF_TITLE: Announcing PSP's cryptographic hardware offload at scale is now open source
+:REF_ORG: Google
+:END:
+
+** NetDev0x18-PSP
+:PROPERTIES:
+:REF_TARGET: https://netdevconf.info/0x18/docs/netdev-0x18-paper35-talk-slides/netdev-0x18-paper35.pdf
+:REF_TITLE: PSP security protocol
+:REF_ORG: Google and Intel
+:END:
+
+** LWN.net-PSP
+:PROPERTIES:
+:REF_TARGET: https://lwn.net/Articles/980430/
+:REF_TITLE: Offload-friendly network encryption in the kernel
+:REF_ORG: Daroc Alden
+:END:
+
+** Patch-RFC
+:PROPERTIES:
+:REF_TARGET: https://lwn.net/ml/netdev/20240510030435.120935-1-kuba@kernel.org/
+:REF_TITLE: Offload-friendly network encryption in the kernel
+:REF_ORG: Daroc Alden
+:END:
