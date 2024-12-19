@@ -1,0 +1,27 @@
+#+TITLE: README for EESP IKEv2 Internet Draft
+#+AUTHOR: Antony Antony
+#+DATE: December 3, 2024
+
+This is the working area for the individual Internet-Draft, "PSP".
+
+* Introduction
+This is an attempt to bring [[https://github.com/google/psp/blob/main/doc/PSP_Arch_Spec.pdf][Google PSP]]
+to IETF to standardize.
+
+
+* Laest Copy
+The latest version of the draft in HTML format is at:
+- [[https://AntonyAntony.github.io/psp/draft-klassert-ipsecme-psp-latest.html][Editor's Copy]]
+# above URL is replaced by .github/workflows/generate.yaml
+# sed -i "s|klassert.github.io/eesp-ikev2|$USERNAME.github.io/$REPO_NAME|g"
+
+* IETF Datatracker Copy
+This document is yet to be submitted to IETF.
+
+* References
+For more detailed information, refer to the following resources:
+- [[https://klassert.github.io/eesp/draft-klassert-ipsecme-eesp-latest.html][EESP I.D. Editor's copy]]
+
+- [[https://datatracker.ietf.org/doc/draft-klassert-ipsecme-eesp][EESP IETF Datatracker copy draft-klassert-ipsecme-eesp]]
+
+- [[https://klassert.github.io/eesp/draft-klassert-ipsecme-eesp-ikev2-latest.html][EESP IKEv2 I.D. Editor's copy]]

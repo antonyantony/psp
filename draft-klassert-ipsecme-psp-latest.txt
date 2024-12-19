@@ -1,0 +1,224 @@
+
+
+
+
+IPSECME Working Group                                        S. Klassert
+Internet-Draft                                                 A. Antony
+Intended status: Informational                                   secunet
+Expires: 22 June 2025                                   19 December 2024
+
+
+                      PSP Security Protocol (PSP)
+                     draft-klassert-ipsecme-psp-00
+
+Abstract
+
+   This docunet specifies The PSP Security Protocol v2 (PSPv2), which
+   use Encapsulating Security Payload (EESP) as packet format.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 22 June 2025.
+
+Copyright Notice
+
+   Copyright (c) 2024 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+
+
+
+
+
+
+Klassert & Antony         Expires 22 June 2025                  [Page 1]
+
+Internet-Draft                     PSP                     December 2024
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+   2.  Stateless Decryption  . . . . . . . . . . . . . . . . . . . .   2
+     2.1.  Advantages  . . . . . . . . . . . . . . . . . . . . . . .   2
+     2.2.  Derive longer keys  . . . . . . . . . . . . . . . . . . .   2
+     2.3.  AEX XTR KDF/PRF . . . . . . . . . . . . . . . . . . . . .   2
+   3.  Normative References  . . . . . . . . . . . . . . . . . . . .   3
+   4.  Informative References  . . . . . . . . . . . . . . . . . . .   3
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .   4
+
+1.  Introduction
+
+   The PSP Security Protocol (PSP) is designed to enable scaling to
+   large numbers of SAs without requiring per-SA hardware state in the
+   NIC.  The PSP v2 extends these concepts using Encapsulating Security
+   Payload (EESP),[I-D.klassert-ipsecme-eesp], packet format and
+   features supported in EESP.
+
+2.  Stateless Decryption
+
+   Stateless Decriptions is very friendly for hardware offloads it is
+   more aligned with bump-in-the-wire than per session keys negotiated
+   in IKEv2, [RFC7296]
+
+2.1.  Advantages
+
+   *  High throughput packets per second
+
+   *  lack of central SADB, SPDB scales well
+
+   *  Hardware offload friendly
+
+   *  Data center friendly
+
+   *  High rate of connection establishing and tear down 200K/sec
+
+2.2.  Derive longer keys
+
+   Instead of deriving a 128bit key, derive a longer key and use the
+   next 32bits as the salt for tge IV.  The reciver when it generate the
+   key and send to the sender should send a longer key,
+
+2.3.  AEX XTR KDF/PRF
+
+   AES XTR also could be used as KDF function?  Which is likely faster
+   than AES-CMAC?
+
+
+
+
+Klassert & Antony         Expires 22 June 2025                  [Page 2]
+
+Internet-Draft                     PSP                     December 2024
+
+
+3.  Normative References
+
+   [I-D.klassert-ipsecme-eesp]
+              Klassert, S., Antony, A., and C. Hopps, "Enhanced
+              Encapsulating Security Payload (EESP)", Work in Progress,
+              Internet-Draft, draft-klassert-ipsecme-eesp-01, 14 October
+              2024, <https://datatracker.ietf.org/doc/html/draft-
+              klassert-ipsecme-eesp-01>.
+
+   [NIST800-108]
+              NIST, "Recommendation for Key Derivation Using
+              Pseudorandom Functions",
+              <https://www.nist.gov/publications/recommendation-key-
+              derivation-using-pseudorandom-functions-1>.
+
+   [RFC2627]  Wallner, D., Harder, E., and R. Agee, "Key Management for
+              Multicast: Issues and Architectures", RFC 2627,
+              DOI 10.17487/RFC2627, June 1999,
+              <https://www.rfc-editor.org/info/rfc2627>.
+
+   [RFC3948]  Huttunen, A., Swander, B., Volpe, V., DiBurro, L., and M.
+              Stenberg, "UDP Encapsulation of IPsec ESP Packets",
+              RFC 3948, DOI 10.17487/RFC3948, January 2005,
+              <https://www.rfc-editor.org/info/rfc3948>.
+
+   [RFC5840]  Grewal, K., Montenegro, G., and M. Bhatia, "Wrapped
+              Encapsulating Security Payload (ESP) for Traffic
+              Visibility", RFC 5840, DOI 10.17487/RFC5840, April 2010,
+              <https://www.rfc-editor.org/info/rfc5840>.
+
+   [RFC7296]  Kaufman, C., Hoffman, P., Nir, Y., Eronen, P., and T.
+              Kivinen, "Internet Key Exchange Protocol Version 2
+              (IKEv2)", STD 79, RFC 7296, DOI 10.17487/RFC7296, October
+              2014, <https://www.rfc-editor.org/info/rfc7296>.
+
+4.  Informative References
+
+   [I-D.klassert-ipsecme-wespv2]
+              Klassert, S. and A. Antony, "Wrapped ESP Version 2", Work
+              in Progress, Internet-Draft, draft-klassert-ipsecme-
+              wespv2-01, 28 June 2024,
+              <https://datatracker.ietf.org/doc/html/draft-klassert-
+              ipsecme-wespv2-01>.
+
+   [PSP]      Google, "PSP Architecture Specification",
+              <https://github.com/google/psp/blob/main/doc/
+              PSP_Arch_Spec.pdf>.
+
+
+
+
+Klassert & Antony         Expires 22 June 2025                  [Page 3]
+
+Internet-Draft                     PSP                     December 2024
+
+
+   [RFC9611]  Antony, A., Brunner, T., Klassert, S., and P. Wouters,
+              "Internet Key Exchange Protocol Version 2 (IKEv2) Support
+              for Per-Resource Child Security Associations (SAs)",
+              RFC 9611, DOI 10.17487/RFC9611, July 2024,
+              <https://www.rfc-editor.org/info/rfc9611>.
+
+Authors' Addresses
+
+   Steffen Klassert
+   secunet Security Networks AG
+   Email: steffen.klassert@secunet.com
+
+
+   Antony Antony
+   secunet Security Networks AG
+   Email: antony.antony@secunet.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Klassert & Antony         Expires 22 June 2025                  [Page 4]
